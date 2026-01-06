@@ -1,0 +1,30 @@
+
+---
+
+# 🧹 STEP 3: Create `.gitignore` (IMPORTANT)
+
+Create a file called **`.gitignore`**
+
+Paste this:
+
+```gitignore
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.env/
+
+# Streamlit
+.streamlit/
+
+# Data files
+*.csv
+*.txt
+
+# OS
+.DS_Store
+Thumbs.db
