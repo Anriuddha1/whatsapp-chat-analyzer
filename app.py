@@ -1,3 +1,7 @@
+import nltk
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+from textblob import TextBlob
 import streamlit as st
 import pandas as pd
 import re
@@ -6,9 +10,8 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import emoji
 from collections import Counter
-import nltk
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
+
+
 
 
 # ------------------ PAGE CONFIG ------------------
