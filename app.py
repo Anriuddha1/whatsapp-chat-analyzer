@@ -6,6 +6,10 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import emoji
 from collections import Counter
+import nltk
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
+
 
 # ------------------ PAGE CONFIG ------------------
 st.set_page_config(
