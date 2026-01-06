@@ -1,7 +1,3 @@
-import nltk
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-from textblob import TextBlob
 import streamlit as st
 import pandas as pd
 import re
