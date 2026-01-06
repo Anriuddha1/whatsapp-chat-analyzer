@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import re
-from textblob import TextBlob
+# from textblob import TextBlob
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import emoji
