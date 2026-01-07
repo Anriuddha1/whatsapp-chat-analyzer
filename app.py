@@ -29,7 +29,6 @@ st.markdown("""
     padding: 1rem;
     border-radius: 16px;
     min-height: 420px;   /* 🔥 SAME HEIGHT */
-    max-height: 420px;
 </style>
 """, unsafe_allow_html=True)
 
@@ -157,7 +156,7 @@ if uploaded_file is not None:
     with right:
         st.subheader("🥧 Member Activity Distribution")
         fig, ax = plt.subplots()
-        ax.pie(data.values, labels=data.index, autopct="%1.1f%%", startangle=90)
+        ax.pie(data.values, labels=data.index, autopct="%1.1f%%", startangle=90 , height=300)
         ax.axis("equal")
         st.pyplot(fig)
 
