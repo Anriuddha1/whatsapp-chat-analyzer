@@ -22,16 +22,6 @@ def download_nltk_data():
 
 download_nltk_data()
 
-st.markdown("""
-<style>
-h1 {
-    color: #060032d9;  /* Indigo */
-    text-align: center;
-    font-weight: 800;
-}
-</style>
-""", unsafe_allow_html=True)
-
 
 
 # ------------------ PAGE CONFIG ------------------
