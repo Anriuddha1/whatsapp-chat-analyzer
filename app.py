@@ -137,17 +137,20 @@ if uploaded_file is not None:
     col2.metric("Active Days", df["Date"].nunique())
     col3.metric("Avg Messages / Day", round(len(df) / df["Date"].nunique(), 2))
 
-    # ------------------ MESSAGES PER USER ------------------
-    st.subheader("📌 Messages per User")
-    data = df_all["User"].value_counts() if selected_user == "Overall" else df["User"].value_counts()
-    st.bar_chart(data)
+    left, right = st.columns(2)
 
-    # ------------------ PIE CHART ------------------
-    st.subheader("🥧 Member Activity Distribution")
-    fig, ax = plt.subplots()
-    ax.pie(data.values, labels=data.index, autopct="%1.1f%%", startangle=90)
-    ax.axis("equal")
-    st.pyplot(fig)
+    with left:
+        st.subheader("📌 Messages per User")
+        data = df_all["User"].value_counts() if selected_user == "Overall" else df["User"].value_counts()
+        st.bar_chart(data)
+
+    with right:
+        st.subheader("🥧 Member Activity Distribution")
+        fig, ax = plt.subplots()
+        ax.pie(data.values, labels=data.index, autopct="%1.1f%%", startangle=90)
+        ax.axis("equal")
+        st.pyplot(fig)
+
 
     # ------------------ SENTIMENT ------------------
     st.subheader("🧠 Sentiment Distribution")
