@@ -29,7 +29,7 @@ st.markdown("""
     padding: 1rem;
     border-radius: 16px;
     min-height: 420px;   /* 🔥 SAME HEIGHT */
-}
+    max-height: 420px;
 </style>
 """, unsafe_allow_html=True)
 
