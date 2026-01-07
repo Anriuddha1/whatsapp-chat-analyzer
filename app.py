@@ -6,6 +6,21 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 import emoji
 from collections import Counter
+import nltk
+
+# Download required NLTK data for TextBlob
+@st.cache_resource
+def download_nltk_data():
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt', quiet=True)
+    try:
+        nltk.data.find('corpora/brown')
+    except LookupError:
+        nltk.download('brown', quiet=True)
+
+download_nltk_data()
 
 
 
