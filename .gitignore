@@ -1,30 +1,16 @@
-
----
-
-# 🧹 STEP 3: Create `.gitignore` (IMPORTANT)
-
-Create a file called **`.gitignore`**
-
-Paste this:
-
-```gitignore
-# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
-# Virtual environment
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.venv/
 venv/
-.env/
-
-# Streamlit
-.streamlit/
-
-# Data files
-*.csv
-*.txt
-
-# OS
+.env
+.streamlit/secrets.toml
+*.txt.upload
 .DS_Store
-Thumbs.db
