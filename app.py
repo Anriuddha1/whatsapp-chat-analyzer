@@ -3,7 +3,7 @@ import pandas as pd
 import re
 from textblob import TextBlob
 import matplotlib.pyplot as plt
-from wordcloud import WordCloud
+# from wordcloud import WordCloud
 import emoji
 from collections import Counter
 import nltk
@@ -159,43 +159,43 @@ if uploaded_file is not None:
     timeline = df["Date"].value_counts().sort_index()
     st.line_chart(timeline)
 
-    # ------------------ WORD CLOUD ------------------
-    st.subheader("☁️ Word Cloud")
+    # # ------------------ WORD CLOUD ------------------
+    # st.subheader("☁️ Word Cloud")
 
-    from wordcloud import STOPWORDS, WordCloud
-    import matplotlib.pyplot as plt
+    # from wordcloud import STOPWORDS, WordCloud
+    # import matplotlib.pyplot as plt
 
-    stop_words = STOPWORDS.union({
-        "media", "omitted", "<media", "omitted>", "this", "message", "was", "deleted",
-        "the", "and", "to", "a", "in", "of"
-    })
+    # stop_words = STOPWORDS.union({
+    #     "media", "omitted", "<media", "omitted>", "this", "message", "was", "deleted",
+    #     "the", "and", "to", "a", "in", "of"
+    # })
 
-    words = [
-        word.lower() for word in " ".join(df["Message"]).split()
-        if word.isalpha() and word.lower() not in stop_words
-    ]
+    # words = [
+    #     word.lower() for word in " ".join(df["Message"]).split()
+    #     if word.isalpha() and word.lower() not in stop_words
+    # ]
 
-    clean_text = " ".join(words)
+    # clean_text = " ".join(words)
 
-    wc = WordCloud(
-        width=850,
-        height=400,
-        background_color="rgba(13, 13, 26, 0)",  # ✅ transparent background
-        stopwords=stop_words,
-        margin=0
-    ).generate(clean_text)
+    # wc = WordCloud(
+    #     width=850,
+    #     height=400,
+    #     background_color="rgba(13, 13, 26, 0)",  # ✅ transparent background
+    #     stopwords=stop_words,
+    #     margin=0
+    # ).generate(clean_text)
 
-    fig, ax = plt.subplots(figsize=(10, 4))
+    # fig, ax = plt.subplots(figsize=(10, 4))
 
-    # 🔴 REMOVE WHITE CANVAS (TRANSPARENT)
-    fig.patch.set_facecolor((13/255, 13/255, 26/255, 0))
-    ax.set_facecolor((13/255, 13/255, 26/255, 0))
+    # # 🔴 REMOVE WHITE CANVAS (TRANSPARENT)
+    # fig.patch.set_facecolor((13/255, 13/255, 26/255, 0))
+    # ax.set_facecolor((13/255, 13/255, 26/255, 0))
 
 
-    ax.imshow(wc, interpolation="bilinear")
-    ax.axis("off")
+    # ax.imshow(wc, interpolation="bilinear")
+    # ax.axis("off")
 
-    st.pyplot(fig)
+    # st.pyplot(fig)
 
 
     text = " ".join(df["Message"])
