@@ -246,8 +246,11 @@ if uploaded_file is not None:
         st.table(df_common)
 
 
-    # ------------------ EMOJI ANALYSIS ------------------
-    st.subheader("😄 Emoji Analysis")
+
+    left, right = st.columns(2)
+
+    with left:
+        st.subheader("😄 Emoji Analysis")
     emojis = []
     for msg in df["Message"]:
         emojis.extend(extract_emojis(msg))
@@ -260,35 +263,37 @@ if uploaded_file is not None:
     else:
         st.info("No emojis found")
 
-    # ------------------ MOST ACTIVE DAY ------------------
-    st.subheader("📅 Most Active Day")
-    day_counts = df["DayName"].value_counts()
-    st.success(f"🔥 {day_counts.idxmax()} ({day_counts.max()} messages)")
-    st.bar_chart(day_counts)
+    with right:
+        st.subheader("📅 Most Active Day")
+        day_counts = df["DayName"].value_counts()
+        st.success(f"🔥 {day_counts.idxmax()} ({day_counts.max()} messages)")
+        st.bar_chart(day_counts)
 
-    # ------------------ MOST ACTIVE MONTH ------------------
-    st.subheader("🗓️ Most Active Month")
-    month_counts = df["MonthName"].value_counts()
-    st.success(f"🔥 {month_counts.idxmax()} ({month_counts.max()} messages)")
-    st.bar_chart(month_counts)
 
-    # ------------------ RAW DATA ------------------
-    st.subheader("📄 Chat Preview")
-    df["Message"] = df["Message"].str.lower().str.strip()
+    left, right = st.columns(2)
+    with left:
+        st.subheader("🗓️ Most Active Month")
+        month_counts = df["MonthName"].value_counts()
+        st.success(f"🔥 {month_counts.idxmax()} ({month_counts.max()} messages)")
+        st.bar_chart(month_counts)
 
-    df = df[
-        (df["Message"] != "") &
-        (~df["Message"].isin([
-            "this message was deleted",
-            "message deleted",
-            "<media omitted>",
-            "media omitted"
-        ]))
-    ]
-    df = df[::-1]
-    df_preview = df.copy()
-    df_preview.index = range(1, len(df_preview) + 1)
-    st.dataframe(df_preview)
+    with right:
+        st.subheader("📄 Chat Preview")
+        df["Message"] = df["Message"].str.lower().str.strip()
+
+        df = df[
+            (df["Message"] != "") &
+            (~df["Message"].isin([
+                "this message was deleted",
+                "message deleted",
+                "<media omitted>",
+                "media omitted"
+            ]))
+        ]
+        df = df[::-1]
+        df_preview = df.copy()
+        df_preview.index = range(1, len(df_preview) + 1)
+        st.dataframe(df_preview)
 
 
 else:
