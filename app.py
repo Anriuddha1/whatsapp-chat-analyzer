@@ -25,7 +25,7 @@ download_nltk_data()
 st.markdown("""
 <style>
 h1 {
-    color: #4F46E5;  /* Indigo */
+    color: #060032d9;  /* Indigo */
     text-align: center;
     font-weight: 800;
 }
