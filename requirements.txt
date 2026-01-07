@@ -1,7 +1,8 @@
-streamlit
-pandas
-textblob
-nltk
-matplotlib
-wordcloud
-emoji
+streamlit==1.31.0
+pandas==2.1.4
+textblob==0.18.0.post0
+nltk==3.8.1
+matplotlib==3.8.2
+wordcloud==1.9.3
+emoji==2.10.0
+Pillow==10.2.0
