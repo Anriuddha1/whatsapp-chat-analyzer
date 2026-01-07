@@ -268,7 +268,7 @@ if uploaded_file is not None:
 else:
     st.info("📤 Upload a WhatsApp chat export (.txt file) to begin")
     st.markdown("""
-    <div style='  background-color: #f0f4ff; padding: 2rem; border-radius: 16px; margin-top: 2rem;'>
+    <div style='  background-color: #060032d9; padding: 2rem; border-radius: 16px; margin-top: 2rem;'>
         <h3 style='color: blue !important; margin-top: 0 !important;'>How to export your chat:</h3>
         <ol style='color: green;'>
             <li>Open WhatsApp and select a chat</li>
