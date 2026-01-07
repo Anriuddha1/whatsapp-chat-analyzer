@@ -269,6 +269,13 @@
 #     st.info("📂 Upload a WhatsApp .txt file to start analysis")
 
 
+
+
+
+
+
+
+
 import streamlit as st
 import pandas as pd
 import re
@@ -281,7 +288,7 @@ import nltk
 import plotly.express as px
 import plotly.graph_objects as go
 
-# Download required NLTK data for TextBlob
+# Download required NLTK data
 @st.cache_resource
 def download_nltk_data():
     try:
@@ -295,106 +302,152 @@ def download_nltk_data():
 
 download_nltk_data()
 
-# ------------------ CUSTOM CSS ------------------
+# ------------------ ELEGANT CSS ------------------
 st.markdown("""
 <style>
-    /* Main background gradient */
-    .stApp {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    * {
+        font-family: 'Inter', sans-serif;
     }
     
-    /* Custom header styling */
+    .stApp {
+        background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    }
+    
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    
+    /* Custom headers */
     h1 {
         color: #ffffff !important;
-        font-size: 3rem !important;
-        font-weight: 800 !important;
+        font-size: 2.8rem !important;
+        font-weight: 700 !important;
         text-align: center;
-        margin-bottom: 0.5rem !important;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        margin-bottom: 0 !important;
+        letter-spacing: -0.5px;
     }
     
-    h2, h3 {
-        color: #ffffff !important;
+    h2 {
+        color: #e0e7ff !important;
+        font-size: 1.5rem !important;
         font-weight: 600 !important;
-        margin-top: 2rem !important;
+        margin-top: 3rem !important;
+        margin-bottom: 1.5rem !important;
     }
     
-    /* Card-like containers */
-    .stMetric {
-        # background: rgba(255, 255, 255, 0.95);
+    h3 {
+        color: #c7d2fe !important;
+        font-size: 1.2rem !important;
+        font-weight: 500 !important;
+    }
+    
+    /* Subtitle */
+    .subtitle {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1.1rem;
+        margin-bottom: 3rem;
+        font-weight: 300;
+    }
+    
+    /* Metric cards */
+    [data-testid="stMetricValue"] {
+        font-size: 2rem !important;
+        font-weight: 700 !important;
+        color: #6366f1 !important;
+    }
+    
+    [data-testid="stMetricLabel"] {
+        font-size: 0.9rem !important;
+        color: #64748b !important;
+        font-weight: 500 !important;
+    }
+    
+    div[data-testid="metric-container"] {
+        background: white;
         padding: 1.5rem;
-        border-radius: 15px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(226, 232, 240, 0.8);
     }
     
-    /* File uploader styling */
-    .stFileUploader {
-        background: rgba(255, 255, 255, 0.95);
+    /* File uploader */
+    [data-testid="stFileUploader"] {
+        background: white;
+        border-radius: 16px;
         padding: 2rem;
-        border-radius: 15px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        border: 2px dashed #667eea;
+        border: 2px dashed #cbd5e1;
+        transition: all 0.3s ease;
     }
     
-    /* Select box styling */
-    .stSelectbox {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 10px;
-        padding: 0.5rem;
+    [data-testid="stFileUploader"]:hover {
+        border-color: #6366f1;
+        box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.1);
     }
     
-    /* Data frame styling */
-    .stDataFrame {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 15px;
+    /* Select box */
+    .stSelectbox > div > div {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e2e8f0;
+    }
+    
+    /* Info/Success boxes */
+    .stAlert {
+        background: white !important;
+        border-radius: 12px !important;
+        border-left: 4px solid #6366f1 !important;
+        padding: 1rem 1.5rem !important;
+    }
+    
+    /* Dataframe */
+    [data-testid="stDataFrame"] {
+        background: white;
+        border-radius: 16px;
         padding: 1rem;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
     
-    /* Success/Info messages */
-    .stSuccess, .stInfo {
-        background: rgba(255, 255, 255, 0.95) !important;
-        border-radius: 10px !important;
-        border-left: 5px solid #10b981 !important;
+    /* Remove padding */
+    .block-container {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
     }
     
     /* Chart containers */
-    .element-container {
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 15px;
+    .chart-container {
+        background: white;
+        border-radius: 16px;
         padding: 1.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         margin: 1rem 0;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     }
     
-    /* Subtitle text */
-    .subtitle {
-        color: rgba(255, 255, 255, 0.9);
-        text-align: center;
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
+    /* Divider */
+    hr {
+        margin: 2rem 0;
+        border: none;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
     }
 </style>
 """, unsafe_allow_html=True)
 
 # ------------------ PAGE CONFIG ------------------
 st.set_page_config(
-    page_title="WhatsApp Chat Analyzer AI",
+    page_title="WhatsApp Analyzer",
     page_icon="💬",
-    layout="wide",
-    menu_items={
-        'Get Help': 'https://www.google.com/help',
-    }
+    layout="wide"
 )
 
 # ------------------ HEADER ------------------
-st.title("💬 WhatsApp Chat Analyzer AI")
-st.markdown('<p class="subtitle">Discover insights from your conversations with beautiful analytics</p>', unsafe_allow_html=True)
+st.markdown("<h1>💬 WhatsApp Chat Analyzer</h1>", unsafe_allow_html=True)
+st.markdown('<p class="subtitle">Unlock insights from your conversations</p>', unsafe_allow_html=True)
 
 # ------------------ FILE UPLOAD ------------------
-uploaded_file = st.file_uploader("📤 Upload Your WhatsApp Chat Export (.txt)", type=["txt"])
+uploaded_file = st.file_uploader("", type=["txt"], label_visibility="collapsed")
 
 # ------------------ CHAT PARSER ------------------
 def parse_chat(file):
@@ -435,7 +488,6 @@ def parse_chat(file):
     df = df.dropna(subset=["Date"])
     return df.dropna()
 
-# ------------------ SENTIMENT ------------------
 def get_sentiment(text):
     polarity = TextBlob(str(text)).sentiment.polarity
     if polarity > 0:
@@ -444,7 +496,6 @@ def get_sentiment(text):
         return "Negative"
     return "Neutral"
 
-# ------------------ EMOJI EXTRACT ------------------
 def extract_emojis(text):
     return [c for c in text if c in emoji.EMOJI_DATA]
 
@@ -453,168 +504,185 @@ if uploaded_file is not None:
     df_all = parse_chat(uploaded_file)
 
     if df_all.empty:
-        st.error("❌ Could not parse chat file. Please check the format.")
+        st.error("Could not parse the chat file. Please check the format.")
         st.stop()
 
-    st.success(f"✅ Successfully parsed {len(df_all):,} messages!")
+    st.success(f"✓ Parsed {len(df_all):,} messages successfully")
 
     df_all["Sentiment"] = df_all["Message"].apply(get_sentiment)
     df_all["DayName"] = df_all["Date"].dt.day_name()
     df_all["MonthName"] = df_all["Date"].dt.month_name()
 
-    # ------------------ USER SELECTION ------------------
-    st.markdown("---")
-    users = ["📊 Overall Group"] + sorted(df_all["User"].unique())
-    selected_user = st.selectbox("🔍 Select Member for Analysis", users)
+    # User selection
+    st.markdown("<br>", unsafe_allow_html=True)
+    users = ["Overall"] + sorted(df_all["User"].unique())
+    selected_user = st.selectbox("Select member", users)
 
-    is_overall = selected_user == "📊 Overall Group"
+    is_overall = selected_user == "Overall"
     df = df_all if is_overall else df_all[df_all["User"] == selected_user]
 
-    st.header("👥 Overall Group Analytics" if is_overall else f"👤 {selected_user}'s Activity")
-
-    # ------------------ METRICS ------------------
+    # Metrics
+    st.markdown("<br>", unsafe_allow_html=True)
     col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.metric("💬 Total Messages", f"{len(df):,}")
-    with col2:
-        st.metric("📅 Active Days", df["Date"].nunique())
-    with col3:
-        st.metric("📊 Avg/Day", f"{len(df) / df['Date'].nunique():.1f}")
-    with col4:
-        st.metric("👥 Participants", df_all["User"].nunique() if is_overall else "1")
+    col1.metric("Messages", f"{len(df):,}")
+    col2.metric("Active Days", f"{df['Date'].nunique():,}")
+    col3.metric("Avg/Day", f"{len(df) / df['Date'].nunique():.1f}")
+    col4.metric("Members", df_all["User"].nunique() if is_overall else 1)
 
-    st.markdown("---")
+    # Timeline
+    st.markdown("<h2>Activity Timeline</h2>", unsafe_allow_html=True)
+    timeline = df.groupby("Date").size().reset_index(name='count')
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=timeline['Date'], 
+        y=timeline['count'],
+        mode='lines',
+        fill='tozeroy',
+        line=dict(color='#6366f1', width=2),
+        fillcolor='rgba(99, 102, 241, 0.1)'
+    ))
+    fig.update_layout(
+        height=350,
+        margin=dict(l=20, r=20, t=20, b=20),
+        paper_bgcolor='white',
+        plot_bgcolor='white',
+        xaxis=dict(showgrid=False, title=""),
+        yaxis=dict(showgrid=True, gridcolor='#f1f5f9', title="Messages")
+    )
+    st.plotly_chart(fig, use_container_width=True)
 
-    # ------------------ INTERACTIVE CHARTS ------------------
+    # Two columns
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("📌 Message Distribution")
-        data = df_all["User"].value_counts() if is_overall else df["User"].value_counts()
-        fig = px.bar(x=data.index, y=data.values, 
-                     labels={'x': 'User', 'y': 'Messages'},
-                     color=data.values,
-                     color_continuous_scale='Viridis')
-        fig.update_layout(showlegend=False, height=400)
+        st.markdown("<h2>Top Members</h2>", unsafe_allow_html=True)
+        data = df_all["User"].value_counts().head(10) if is_overall else df["User"].value_counts()
+        fig = go.Figure()
+        fig.add_trace(go.Bar(
+            x=data.values,
+            y=data.index,
+            orientation='h',
+            marker=dict(
+                color=data.values,
+                colorscale='Blues',
+                showscale=False
+            )
+        ))
+        fig.update_layout(
+            height=400,
+            margin=dict(l=20, r=20, t=20, b=20),
+            paper_bgcolor='white',
+            plot_bgcolor='white',
+            xaxis=dict(showgrid=False, title=""),
+            yaxis=dict(showgrid=False, title="")
+        )
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        st.subheader("🥧 Activity Share")
-        fig = px.pie(values=data.values, names=data.index, hole=0.4)
-        fig.update_traces(textposition='inside', textinfo='percent+label')
-        fig.update_layout(height=400)
+        st.markdown("<h2>Sentiment</h2>", unsafe_allow_html=True)
+        sentiment_counts = df["Sentiment"].value_counts()
+        colors = {'Positive': '#10b981', 'Neutral': '#6b7280', 'Negative': '#ef4444'}
+        fig = go.Figure()
+        fig.add_trace(go.Bar(
+            x=sentiment_counts.index,
+            y=sentiment_counts.values,
+            marker=dict(color=[colors.get(x, '#6366f1') for x in sentiment_counts.index])
+        ))
+        fig.update_layout(
+            height=400,
+            margin=dict(l=20, r=20, t=20, b=20),
+            paper_bgcolor='white',
+            plot_bgcolor='white',
+            xaxis=dict(showgrid=False, title=""),
+            yaxis=dict(showgrid=False, title="")
+        )
         st.plotly_chart(fig, use_container_width=True)
 
-    # ------------------ SENTIMENT ------------------
-    st.subheader("🧠 Sentiment Analysis")
-    sentiment_counts = df["Sentiment"].value_counts()
-    fig = go.Figure(data=[
-        go.Bar(x=sentiment_counts.index, y=sentiment_counts.values,
-               marker_color=['#10b981', '#f59e0b', '#ef4444'])
-    ])
-    fig.update_layout(height=350)
-    st.plotly_chart(fig, use_container_width=True)
-
-    # ------------------ TIMELINE ------------------
-    st.subheader("📈 Activity Timeline")
-    timeline = df.groupby("Date").size().reset_index(name='Messages')
-    fig = px.line(timeline, x='Date', y='Messages', 
-                  markers=True, line_shape='spline')
-    fig.update_traces(line_color='#667eea', line_width=3)
-    fig.update_layout(height=400)
-    st.plotly_chart(fig, use_container_width=True)
-
-    # ------------------ WORD CLOUD ------------------
-    st.subheader("☁️ Word Cloud")
+    # Word Cloud
+    st.markdown("<h2>Most Used Words</h2>", unsafe_allow_html=True)
     from wordcloud import STOPWORDS
     stop_words = STOPWORDS.union({
-        "media", "omitted", "<media", "omitted>", "this", "message", "was", "deleted",
-        "the", "and", "to", "a", "in", "of"
+        "media", "omitted", "<media", "omitted>", "this", "message", "was", "deleted"
     })
     words = [word.lower() for word in " ".join(df["Message"]).split()
              if word.isalpha() and word.lower() not in stop_words]
-    clean_text = " ".join(words)
-
-    if clean_text:
-        wc = WordCloud(width=1200, height=400, background_color="white",
-                      stopwords=stop_words, colormap='viridis',
-                      margin=10).generate(clean_text)
-        fig, ax = plt.subplots(figsize=(12, 5))
+    
+    if words:
+        clean_text = " ".join(words)
+        wc = WordCloud(
+            width=1400, 
+            height=400, 
+            background_color="white",
+            stopwords=stop_words, 
+            colormap='viridis',
+            margin=5
+        ).generate(clean_text)
+        
+        fig, ax = plt.subplots(figsize=(14, 4))
+        fig.patch.set_facecolor('white')
+        ax.set_facecolor('white')
         ax.imshow(wc, interpolation="bilinear")
         ax.axis("off")
+        plt.tight_layout(pad=0)
         st.pyplot(fig)
 
-    # ------------------ COMMON WORDS & EMOJIS ------------------
+    # Activity patterns
     col1, col2 = st.columns(2)
 
     with col1:
-        st.subheader("📝 Top 15 Words")
-        text = " ".join(df["Message"])
-        stop_words = {"media", "omitted", "<media", "omitted>", "this", "message", "was", "deleted",
-                     "the", "and", "to", "a", "in", "of"}
-        words = [word for word in text.split()
-                if word.lower() not in stop_words and word.isalpha()]
-        common_words = Counter(words).most_common(15)
-        df_common = pd.DataFrame(common_words, columns=["Word", "Count"])
-        df_common.index = range(1, len(df_common) + 1)
-        st.dataframe(df_common, use_container_width=True)
+        st.markdown("<h2>By Day</h2>", unsafe_allow_html=True)
+        day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        day_counts = df["DayName"].value_counts().reindex(day_order, fill_value=0)
+        fig = go.Figure()
+        fig.add_trace(go.Bar(
+            x=day_counts.index,
+            y=day_counts.values,
+            marker=dict(color='#8b5cf6')
+        ))
+        fig.update_layout(
+            height=300,
+            margin=dict(l=20, r=20, t=20, b=20),
+            paper_bgcolor='white',
+            plot_bgcolor='white',
+            xaxis=dict(showgrid=False, title=""),
+            yaxis=dict(showgrid=False, title="")
+        )
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        st.subheader("😄 Top 10 Emojis")
+        st.markdown("<h2>Top Emojis</h2>", unsafe_allow_html=True)
         emojis = []
         for msg in df["Message"]:
             emojis.extend(extract_emojis(msg))
         if emojis:
-            df_emoji = pd.DataFrame(Counter(emojis).most_common(10),
-                                   columns=["Emoji", "Count"])
+            emoji_counts = Counter(emojis).most_common(10)
+            df_emoji = pd.DataFrame(emoji_counts, columns=["Emoji", "Count"])
             df_emoji.index = range(1, len(df_emoji) + 1)
-            st.dataframe(df_emoji, use_container_width=True)
+            st.dataframe(df_emoji, use_container_width=True, height=300)
         else:
-            st.info("No emojis found in messages")
+            st.info("No emojis found")
 
-    # ------------------ ACTIVITY PATTERNS ------------------
-    col1, col2 = st.columns(2)
-
-    with col1:
-        st.subheader("📅 Most Active Day")
-        day_counts = df["DayName"].value_counts()
-        st.success(f"🔥 **{day_counts.idxmax()}** with {day_counts.max():,} messages")
-        fig = px.bar(x=day_counts.index, y=day_counts.values,
-                    labels={'x': 'Day', 'y': 'Messages'},
-                    color=day_counts.values, color_continuous_scale='Blues')
-        fig.update_layout(showlegend=False, height=300)
-        st.plotly_chart(fig, use_container_width=True)
-
-    with col2:
-        st.subheader("🗓️ Most Active Month")
-        month_counts = df["MonthName"].value_counts()
-        st.success(f"🔥 **{month_counts.idxmax()}** with {month_counts.max():,} messages")
-        fig = px.bar(x=month_counts.index, y=month_counts.values,
-                    labels={'x': 'Month', 'y': 'Messages'},
-                    color=month_counts.values, color_continuous_scale='Purples')
-        fig.update_layout(showlegend=False, height=300)
-        st.plotly_chart(fig, use_container_width=True)
-
-    # ------------------ RAW DATA ------------------
-    st.markdown("---")
-    st.subheader("📄 Message History")
+    # Raw data
+    st.markdown("<h2>Message History</h2>", unsafe_allow_html=True)
     df_clean = df[
         (df["Message"] != "") &
-        (~df["Message"].isin([
-            "this message was deleted", "message deleted",
-            "<media omitted>", "media omitted"
-        ]))
+        (~df["Message"].isin(["this message was deleted", "message deleted", 
+                             "<media omitted>", "media omitted"]))
     ].copy()
-    df_clean = df_clean[::-1]
+    df_clean = df_clean.sort_values('Date', ascending=False)
     df_clean.index = range(1, len(df_clean) + 1)
-    st.dataframe(df_clean, use_container_width=True, height=400)
+    st.dataframe(df_clean.head(100), use_container_width=True, height=400)
 
 else:
-    st.info("👆 Please upload a WhatsApp chat export file (.txt) to begin analysis")
+    st.info("📤 Upload a WhatsApp chat export (.txt file) to begin")
     st.markdown("""
-    ### 📖 How to Export WhatsApp Chat:
-    1. Open WhatsApp chat
-    2. Tap the three dots (⋮) → **More** → **Export chat**
-    3. Choose **Without Media**
-    4. Upload the .txt file here
-    """)
+    <div style='background: white; padding: 2rem; border-radius: 16px; margin-top: 2rem;'>
+        <h3 style='color: #1e293b !important; margin-top: 0 !important;'>How to export your chat:</h3>
+        <ol style='color: #475569;'>
+            <li>Open WhatsApp and select a chat</li>
+            <li>Tap ⋮ (menu) → More → Export chat</li>
+            <li>Choose "Without Media"</li>
+            <li>Upload the .txt file here</li>
+        </ol>
+    </div>
+    """, unsafe_allow_html=True)
