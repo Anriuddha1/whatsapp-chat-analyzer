@@ -246,9 +246,9 @@ if uploaded_file is not None:
         st.table(df_common)
 
 
-    # left, right = st.columns(2)
+    left, right = st.columns(2)
 
-    # with left:
+    with left:
         st.subheader("😄 Emoji Analysis")
         emojis = []
         for msg in df["Message"]:
@@ -262,7 +262,7 @@ if uploaded_file is not None:
         else:
             st.info("No emojis found")
 
-    # with right:
+    with right:
         st.subheader("📅 Most Active Day")
         day_counts = df["DayName"].value_counts()
         st.success(f"🔥 {day_counts.idxmax()} ({day_counts.max()} messages)")
