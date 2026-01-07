@@ -162,17 +162,21 @@ if uploaded_file is not None:
         st.pyplot(fig)
 
 
-    # ------------------ SENTIMENT ------------------
-    st.subheader("🧠 Sentiment Distribution")
-    st.bar_chart(df["Sentiment"].value_counts())
+    left, right = st.columns(2)
 
-    # ------------------ TIMELINE ------------------
-    st.subheader("📈 Activity Timeline")
-    timeline = df["Date"].value_counts().sort_index()
-    st.line_chart(timeline)
+    with left:
+        st.subheader("🧠 Sentiment Distribution")
+        st.bar_chart(df["Sentiment"].value_counts())
+
+    with right:
+        st.subheader("📈 Activity Timeline")
+        timeline = df["Date"].value_counts().sort_index()
+        st.line_chart(timeline)
+
+
 
     # ------------------ WORD CLOUD ------------------
-    st.subheader("☁️ Word Cloud")
+    
 
     from wordcloud import STOPWORDS, WordCloud
     import matplotlib.pyplot as plt
@@ -207,12 +211,12 @@ if uploaded_file is not None:
     ax.imshow(wc, interpolation="bilinear")
     ax.axis("off")
 
-    st.pyplot(fig)
+
 
 
     text = " ".join(df["Message"])
     # ------------------ COMMON WORDS ------------------
-    st.subheader("📝 Most Common Words")
+   
 
     stop_words = {
         "media", "omitted", "<media", "omitted>","this","message","was","deleted",
@@ -231,7 +235,17 @@ if uploaded_file is not None:
     # 🔥 START INDEX FROM 1
     df_common.index = range(1, len(df_common) + 1)
 
-    st.table(df_common)
+    left, right = st.columns(2)
+
+    with left:
+        st.subheader("☁️ Word Cloud")
+        st.pyplot(fig)   # your existing wordcloud fig
+
+    with right:
+        st.subheader("📝 Most Common Words")
+        st.table(df_common)
+
+
     # ------------------ EMOJI ANALYSIS ------------------
     st.subheader("😄 Emoji Analysis")
     emojis = []
