@@ -28,7 +28,7 @@ st.markdown("""
     background-color: #0d0d1a;
     padding: 1rem;
     border-radius: 16px;
-    height: 600px;   /* 🔥 SAME HEIGHT */
+    min-height: 600px;   /* 🔥 SAME HEIGHT */
 }
 </style>
 """, unsafe_allow_html=True)
