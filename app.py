@@ -22,6 +22,16 @@ def download_nltk_data():
 
 download_nltk_data()
 
+st.markdown("""
+<style>
+.analysis-card {
+    background-color: #0d0d1a;
+    padding: 1rem;
+    border-radius: 16px;
+    min-height: 420px;   /* 🔥 SAME HEIGHT */
+}
+</style>
+""", unsafe_allow_html=True)
 
 
 # ------------------ PAGE CONFIG ------------------
