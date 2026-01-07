@@ -321,7 +321,7 @@ st.markdown("""
     
     /* Card-like containers */
     .stMetric {
-        background: rgba(255, 255, 255, 0.95);
+        # background: rgba(255, 255, 255, 0.95);
         padding: 1.5rem;
         border-radius: 15px;
         box-shadow: 0 8px 32px rgba(0,0,0,0.1);
